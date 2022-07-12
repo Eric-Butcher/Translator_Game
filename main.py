@@ -78,6 +78,7 @@ def get_start_info():
                 else:
                     ending = "spanish"
                 print("You are translating from " + starting.capitalize() + " to " + ending.capitalize() + ".")
+                print()
                 break
             else:
                 print("Please chosoe either English or Spanish!")
@@ -105,7 +106,7 @@ def get_start_info():
             print() # goes back to top of function and user re-does process
             
         
-def confirm_start_info(returned_list):
+def confirm_start_info(returned_list): # helper function of get_start_info()
 
     # unpackage the data from get_start_info()
     starting = returned_list[0] # the language the user wanted to start with
@@ -157,9 +158,78 @@ def get_play_info(start_info):
         return ("ERROR: Start and End lists not transmitted properly")
     
 
+def run_game(returned_list):
+    start_list = returned_list[0]
+    end_list = returned_list[1]
+
+    num_translated = 0
+    num_translated_correctly = 0
+
+    # creates a list of the index values for the unit being translated
+    available_indexes_list = []
+    counter = 0
+    for spot in start_list:
+        available_indexes_list.append(counter)
+        counter += 1
+    
+    still_going = True
+    while still_going:
+
+        length_available_indexes_list = len(available_indexes_list)
+        if (length_available_indexes_list <= 0):
+            still_going = False
+            return [num_translated, num_translated_correctly]
+    
+        # get one of the available values from available_indexes_list to be used as an index to call to start/end_list
+        # remove that value from available_indexes_list so that the same term is not presented more than once
+        random_index = random.randint(0, (length_available_indexes_list - 1) ) # gets the random index in available_indexes_list
+        prompt_index = available_indexes_list.pop(random_index) # returns the value at that random index, and removes it from the list
+
+        presented_choices = start_list[prompt_index] # the list of available words the user may translate from
+        translated_choices = end_list[prompt_index] # the available translations for that word
+
+        was_correct = translate_prompt( [presented_choices, translated_choices] )
+        
+        num_translated += 1
+        if (was_correct == True):
+            num_translated_correctly += 1
+        
+        pause(1)
+
+
+
+
+def translate_prompt(choices_lists):
+
+    clear()
+    
+
+    presented_choices = choices_lists[0]
+    translated_choices = choices_lists[1]
+
+    word_to_present = random.choice(presented_choices)
+    print("Term: " + word_to_present)
+    user_translation = input("Translation: " )
+    if user_translation in translated_choices:
+        print("Correct!")
+        return True
+    else:
+        print("Incorrect!")
+        return False
+
+
+def pause(s):
+    sleep(s)
+    
+
+
+
 def play_game():
+    clear()
     start_info = get_start_info() # start info will equal the return_list containing the starting language and unit
-    print(get_play_info(start_info))
+    play_info = get_play_info(start_info)
+    run_game(play_info)
+
     
 
 ### )
