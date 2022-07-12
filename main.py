@@ -218,17 +218,27 @@ def translate_prompt(choices_lists):
         return False
 
 
+def show_results(results):
+    num_translated = results[0]
+    num_translated_correctly = results[1]
+
+    clear()
+
+    print("You translated " + str(num_translated_correctly) + " correctly out of " + str(num_translated) + ".")
+    accuracy = round(((num_translated / num_translated_correctly) * 100.0))
+    print("Your accuracy was: " + str(accuracy) + "%")
+
+
 def pause(s):
     sleep(s)
     
-
-
 
 def play_game():
     clear()
     start_info = get_start_info() # start info will equal the return_list containing the starting language and unit
     play_info = get_play_info(start_info)
-    run_game(play_info)
+    results = run_game(play_info)
+    show_results(results)
 
     
 
