@@ -362,6 +362,5 @@ def play_game():
     results = run_game(play_info)
     show_results(results)
 
+
 play_game()
-
-
